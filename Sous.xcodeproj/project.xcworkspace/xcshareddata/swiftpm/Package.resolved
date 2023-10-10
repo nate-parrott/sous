@@ -1,0 +1,32 @@
+{
+  "pins" : [
+    {
+      "identity" : "grdb.swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/groue/GRDB.swift.git",
+      "state" : {
+        "revision" : "458b7211df26cc39b0283aa6dceeebbfe2181aa6",
+        "version" : "6.19.0"
+      }
+    },
+    {
+      "identity" : "swiftsoup",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/scinfu/SwiftSoup.git",
+      "state" : {
+        "revision" : "8b6cf29eead8841a1fa7822481cb3af4ddaadba6",
+        "version" : "2.6.1"
+      }
+    },
+    {
+      "identity" : "usearch",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/unum-cloud/usearch.git",
+      "state" : {
+        "revision" : "b1ea6ac208740dfdb68cfe846e3cb955fe38dc5a",
+        "version" : "1.3.0"
+      }
+    }
+  ],
+  "version" : 2
+}
