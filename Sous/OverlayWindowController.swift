@@ -27,6 +27,7 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
 //        window.acceptsMouseMovedEvents = false
 //        window.ignoresMouseEvents = true
         window.level = .screenSaver
+        window.hasShadow = true
         self.window = window
     }
 
@@ -52,5 +53,11 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
         let frame = CGRect(x: screen.frame.minX, y: screen.frame.minY, width: screen.frame.width, height: screen.frame.height)
         coordinator.windowSize = frame.size
         window?.setFrame(frame, display: true)
+    }
+
+    // MARK: - Actions
+
+    @IBAction func clear(_ sender: Any?) {
+        coordinator.session.store.modify { $0.messages.removeAll() }
     }
 }

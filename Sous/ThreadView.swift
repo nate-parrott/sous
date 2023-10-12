@@ -1,51 +1,45 @@
 import SwiftUI
 
-struct ContentView: View {
+struct ThreadView: View {
     @ObservedObject var session: CopilotSession
     @State private var input = ""
     @State private var focusDate: Date?
-    @State private var contentSize: CGSize = .init(width: 200, height: 21)
-    var padding: CGFloat = 12
+    @State private var inputSize: CGSize = .init(width: 200, height: 21)
+    var padding: CGFloat = 16
 
     @State private var messages = [CopilotState.Message]()
+    @State private var typing = false
 
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 16) {
             answer
 
-            HStack(alignment: .top, spacing: 0) {
-                Image("Chef")
-                    .resizable()
-                    .interpolation(.high)
-                    .padding(padding)
-                    .frame(width: 45, height: 45)
-
-                InputTextField(text: $input, options: options, focusDate: focusDate, onEvent: onEvent(_:), contentSize: $contentSize)
-                    .frame(height: contentSize.height)
-                    .padding(.leading, -padding)
-            }
-            .frame(width: 500)
+            InputTextField(text: $input, options: options, focusDate: focusDate, onEvent: onEvent(_:), contentSize: $inputSize)
+                .frame(height: inputSize.height)
+                .asBubble(bgColor: Color.blue, fgColor: .white)
         }
         .onReceive(session.store.publisher.map(\.messages).removeDuplicates(), perform: { self.messages = $0 })
+        .onReceive(session.store.publisher.map(\.typing).removeDuplicates(), perform: { self.typing = $0 })
+        .edgesIgnoringSafeArea(.all)
     }
 
     @ViewBuilder private var answer: some View {
         if messagesToShow.count > 0 {
             ExpandingScrollView(maxHeight: 500) {
-                VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 16) {
                     ForEachUnidentifiable(items: messageViewModels) { vm in
                         MessageView(model: vm)
+//                            .transition(.scale)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .padding(padding)
             }
-            Divider()
+//            .animation(.snappy, value: messagesToShow)
         }
     }
 
     private var messageViewModels: [MessageViewModel] {
-        MessageViewModel.from(messages: messages, tools: session.tools)
+        MessageViewModel.from(messages: messages, tools: session.tools, typing: typing)
     }
 
     private var messagesToShow: [CopilotState.Message] {
@@ -62,8 +56,8 @@ struct ContentView: View {
     private var options: InputTextFieldOptions {
         .init(
             placeholder: "What can I do for you?",
-            font: .systemFont(ofSize: 18, weight: .medium),
-            color: .textColor,
+            font: .chatFont,
+            color: NSColor.white,
             insets: .init(width: padding, height: padding)
         )
     }
@@ -86,6 +80,29 @@ struct ContentView: View {
     }
 }
 
-#Preview {
-    ContentView(session: CopilotSession())
+extension Font {
+    static var chatFont: Font {
+        .system(size: 15)
+    }
+}
+
+extension NSFont {
+    static var chatFont: NSFont {
+        .systemFont(ofSize: 15)
+    }
+}
+
+extension View {
+    @ViewBuilder func asBubble(bgColor: Color, fgColor: Color) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
+
+        self
+        .background(bgColor.opacity(0.8))
+        .background(.regularMaterial)
+        .clipShape(shape)
+        .overlay {
+            shape.strokeBorder(fgColor.opacity(0.1), lineWidth: 0.5)
+        }
+        .foregroundColor(fgColor)
+    }
 }

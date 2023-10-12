@@ -1,12 +1,20 @@
 import SwiftUI
 
+@MainActor
 class OverlayViewCoordinator: ObservableObject {
     @Published var windowSize = CGSize.zero
     @Published var dockRect = CGRect.zero
 
+    let session = CopilotSession()
+
     typealias Completion = () -> Void
+
+    // Overlay view sets; NSWindow calls
     var putAway: ((@escaping Completion) -> Void)? // param is a completion
     var show: (() -> Void)?
+
+    // NSWindow sets; overlay window calls:
+    var overlayViewWantsToDismiss: (() -> Void)?
 }
 
 struct OverlayView: View {
@@ -14,6 +22,7 @@ struct OverlayView: View {
 
     @State private var visible = false
     @State private var positionOffset: CGPoint = .zero
+    @State private var positionOffsetAtStartOfDrag: CGPoint?
 
     var body: some View {
         ZStack {
@@ -30,17 +39,22 @@ struct OverlayView: View {
                         .resizable()
                         .interpolation(.high)
                         .frame(both: 128)
+                        .onTapGesture {
+                            coordinator.overlayViewWantsToDismiss?()
+                        }
+                        .overlay(alignment: .bottomLeading) { thread }
                         .scaleEffect(scale)
                         .position(pos)
-//                        .position(.init(x: 200, y: 200))
-
-//                    Color.red.opacity(0.1)
+                        .gesture(DragGesture().onChanged { val in
+                            if let b = positionOffsetAtStartOfDrag {
+                                self.positionOffset.x = b.x + val.location.x - val.startLocation.x
+                                self.positionOffset.y = b.y + val.location.y - val.startLocation.y
+                            } else {
+                                positionOffsetAtStartOfDrag = positionOffset
+                            }
+                        }.onEnded {  _ in positionOffsetAtStartOfDrag = nil })
                 }
-
-
-//                Text("Visible: \(visible ? "vis" : "not")")
             }
-//            .border(.green)
         }
         .frame(width: coordinator.windowSize.width, height: coordinator.windowSize.height)
         .onAppear {
@@ -53,36 +67,21 @@ struct OverlayView: View {
             }
 
             coordinator.putAway = { completion in
-                withAnimation(.snappy, completionCriteria: .logicallyComplete) {
+                withAnimation(.snappy(duration: 0.3, extraBounce: 0.1), completionCriteria: .logicallyComplete) {
                     self.visible = false
                 } completion: {
                     completion()
                 }
             }
-        }
-//        .frame(maxWidth: .infinity, maxHeight: .infinity)
-//        Circle().fill(.blue)
-//            .frame(width: 500, height: 500)
-//            .padding(100)
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }  
     }
-//
-//    func display(fromPos pos: CGRect) {
-//        dockRect = pos
-//        self.visible = false
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-//            withAnimation(.snappy) {
-//                self.visible = true
-//            }
-//        }
-//    }
-//
-//    func putAway(toPos pos: CGRect, onDone: @escaping () -> Void) {
-//        dockRect = pos
-//        withAnimation(.snappy, completionCriteria: .logicallyComplete) {
-//            self.visible = false
-//        } completion: {
-//            onDone()
-//        }
-//    }
+
+    @ViewBuilder private var thread: some View {
+        ThreadView(session: coordinator.session)
+            .frame(width: 300)
+            .padding(.leading, 128 + 30)
+            .padding(.bottom, (128 - 50) / 2)
+            .opacity(visible ? 1 : 0)
+            .scaleEffect(visible ? 1 : 0.1)
+    }
 }

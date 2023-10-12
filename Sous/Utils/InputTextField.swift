@@ -95,18 +95,25 @@ class _InputTextFieldView: NSView, NSTextViewDelegate {
     }
     
     private func setup() {
+        scrollView.automaticallyAdjustsContentInsets = false
+        scrollView.hasVerticalScroller = false
         textView.backgroundColor = .clear
         textView.isRichText = false
         textView.delegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(textDidChange(_:)), name: NSText.didChangeNotification, object: textView)
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
+//        scrollView.translatesAutoresizingMaskIntoConstraints = false
         addSubview(scrollView)
-        NSLayoutConstraint.activate([
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            scrollView.topAnchor.constraint(equalTo: topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
-        ])
+//        NSLayoutConstraint.activate([
+//            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
+//            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+//            scrollView.topAnchor.constraint(equalTo: topAnchor),
+//            scrollView.bottomAnchor.constraint(equalTo: bottomAnchor),
+//        ])
+    }
+
+    override func layout() {
+        super.layout()
+        scrollView.frame = bounds
     }
 
     var options: InputTextFieldOptions = InputTextFieldOptions(placeholder: "") {

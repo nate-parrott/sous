@@ -14,7 +14,22 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
 //        overlayWin.window!.makeKeyAndOrderFront(nil)
-        dockIconClicked()
+
+        if let screen = NSScreen.main {
+            overlayWin.coordinator.dockRect = .init(center: CGPoint(x: screen.frame.midX, y: screen.frame.maxY + 100), size: CGSize(width: 60, height: 60))
+        }
+
+        overlayWin.coordinator.overlayViewWantsToDismiss = { [weak self] in
+            self?.setVisible(false)
+        }
+
+        setVisible(true)
+
+        HotkeySetup.registerGlobalHotkey { [weak self] in
+            DispatchQueue.main.async {
+                self?.toggleVisible()
+            }
+        }
     }
 
     func applicationWillTerminate(_ aNotification: Notification) {
@@ -42,11 +57,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     // MARK: - Lifecycle
+    @MainActor
     func dockIconClicked() {
         guard let screen = NSScreen.main, let window = overlayWin.window else { return }
 
         overlayWin.coordinator.dockRect = screen.inferredRectOfHoveredDockIcon
-        let willShow = !window.isVisible
+        setVisible(!window.isVisible)
+    }
+
+    @MainActor func toggleVisible() {
+        setVisible(!isVisible)
+    }
+
+    var isVisible: Bool {
+        overlayWin.window?.isVisible ?? false
+    }
+
+    @MainActor
+    func setVisible(_ willShow: Bool) {
+        guard let window = overlayWin.window else { return }
 
         if !willShow {
             overlayWin.coordinator.putAway? {

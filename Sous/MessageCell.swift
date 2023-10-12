@@ -6,11 +6,28 @@ struct MessageViewModel: Equatable, Codable {
     var fromMe: Bool
     var body: MessageBodyViewModel
 
-    static func from(messages: [CopilotState.Message], tools: Tools) -> [Self] {
-        messages.flatMap { msg in
-            let bodies = MessageBodyViewModel.from(message: msg, tools: tools)
-            return bodies.map { MessageViewModel(fromMe: msg.message.role == .user, body: $0) }
+    static func from(messages: [CopilotState.Message], tools: Tools, typing: Bool, collapseToolUse: Bool = true) -> [Self] {
+
+        var messages: [MessageViewModel] = messages.flatMap { msg in
+            let bodies = MessageBodyViewModel.from(message: msg, tools: tools, collapseToolUse: collapseToolUse)
+            return bodies
+                .compactMap { body -> MessageBodyViewModel? in
+                    if collapseToolUse {
+                        switch body {
+                        case .run(code: _, kind: let kind): return .toolUsePlaceholder(text: "Using \(kind)", icon: "gearshape.arrow.triangle.2.circlepath")
+                        case .codeOutput: return nil
+                        default: return body
+                        }
+                    } else {
+                        return body
+                    }
+                }
+                .map { MessageViewModel(fromMe: msg.message.role == .user, body: $0) }
         }
+        if typing {
+            messages.append(.init(fromMe: false, body: .typing))
+        }
+        return messages
     }
 }
 
@@ -19,9 +36,12 @@ enum MessageBodyViewModel: Equatable, Codable {
     case codeBlock(String)
     case run(code: String, kind: String)
     case codeOutput(String)
+    case toolUsePlaceholder(text: String, icon: String)
     case unknown(String)
+    case typing
 
-    static func from(message: CopilotState.Message, tools: Tools) -> [Self] {
+    static func from(message: CopilotState.Message, tools: Tools, collapseToolUse: Bool) -> [Self] {
+        if collapseToolUse, message.message.role == .function { return [] }
         var models = [Self]()
         if message.message.content != "" {
             // Split message content on full-line code block boundaries using regex that matches ``` on its own line
@@ -41,6 +61,7 @@ enum MessageBodyViewModel: Equatable, Codable {
             }
         }
         if let functionCall = message.message.functionCall {
+            // TODO: Parse tool outputs into specialized view models
             if let vm = tools.viewModel(fromFunctionCall: functionCall) {
                 models.append(vm)
             } else {
@@ -57,11 +78,9 @@ struct MessageView: View {
     var body: some View {
         MessageBodyView(model: model.body)
             .lineLimit(nil)
-            .background(model.fromMe ? Color.blue : Color.primary.opacity(0.1))
-            .foregroundColor(model.fromMe ? .white : nil)
-            .cornerRadius(16)
-            .frame(maxWidth: .infinity, alignment: model.fromMe ? .trailing : .leading)
             .multilineTextAlignment(model.fromMe ? .trailing : .leading)
+            .asBubble(bgColor: model.fromMe ? Color.blue : Color.clear, fgColor: model.fromMe ? .white : Color.primary)
+            .frame(maxWidth: .infinity, alignment: model.fromMe ? .trailing : .leading)
     }
 }
 
@@ -80,6 +99,14 @@ struct MessageBodyView: View {
             CodeBlockView(code: text, label: nil)
         case .unknown(let text):
             CodeBlockView(code: text, label: nil)
+        case .typing:
+            TypingView()
+        case .toolUsePlaceholder(text: let text, icon: let icon):
+            HStack {
+                Image(systemName: icon).foregroundStyle(.purple)
+                Text(text)
+            }
+            .asStandardMessageText
         }
     }
 }
@@ -89,10 +116,17 @@ private struct MarkdownView: View {
 
     var body: some View {
         Text(markdown: markdown)
+            .asStandardMessageText
+    }
+}
+
+extension View {
+    var asStandardMessageText: some View {
+        self
             .font(.system(.body))
             .textSelection(.enabled)
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
     }
 }
 

@@ -14,12 +14,15 @@
 		5F17E3742AD62EE600F402D3 /* OverlayWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3732AD62EE600F402D3 /* OverlayWindowController.swift */; };
 		5F17E3762AD62F6F00F402D3 /* OverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3752AD62F6F00F402D3 /* OverlayView.swift */; };
 		5F17E3782AD6390400F402D3 /* Geometry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3772AD6390400F402D3 /* Geometry.swift */; };
+		5F17E3A32AD780EF00F402D3 /* ThreadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3A22AD780EF00F402D3 /* ThreadView.swift */; };
+		5F17E3A52AD78E1800F402D3 /* TypingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3A42AD78E1800F402D3 /* TypingView.swift */; };
+		5F17E3B12AD7A87800F402D3 /* DDHotKeyCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3AD2AD7A87800F402D3 /* DDHotKeyCenter.m */; };
+		5F17E3B22AD7A87800F402D3 /* DDHotKeyTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3AE2AD7A87800F402D3 /* DDHotKeyTextField.m */; };
+		5F17E3B32AD7A87800F402D3 /* DDHotKeyUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3B02AD7A87800F402D3 /* DDHotKeyUtilities.m */; };
+		5F17E3B82AD7A89700F402D3 /* HotkeySetup.m in Sources */ = {isa = PBXBuildFile; fileRef = 5F17E3B72AD7A89700F402D3 /* HotkeySetup.m */; };
 		5F2598112AD3337C003AF325 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2598102AD3337C003AF325 /* AppDelegate.swift */; };
-		5F2598132AD3337C003AF325 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2598122AD3337C003AF325 /* ViewController.swift */; };
 		5F2598152AD3337C003AF325 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5F2598142AD3337C003AF325 /* Assets.xcassets */; };
 		5F2598182AD3337C003AF325 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5F2598162AD3337C003AF325 /* Main.storyboard */; };
-		5F2598202AD335A1003AF325 /* WindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25981F2AD335A1003AF325 /* WindowController.swift */; };
-		5F2598222AD337CA003AF325 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2598212AD337CA003AF325 /* ContentView.swift */; };
 		5F2598252AD33B0B003AF325 /* View+Measure.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2598242AD33B0B003AF325 /* View+Measure.swift */; };
 		5F2598272AD3516D003AF325 /* InputTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F2598262AD3516D003AF325 /* InputTextField.swift */; };
 		5F25982A2AD35BDD003AF325 /* Metal.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5F2598292AD35BDD003AF325 /* Metal.framework */; };
@@ -43,14 +46,22 @@
 		5F17E3732AD62EE600F402D3 /* OverlayWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayWindowController.swift; sourceTree = "<group>"; };
 		5F17E3752AD62F6F00F402D3 /* OverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayView.swift; sourceTree = "<group>"; };
 		5F17E3772AD6390400F402D3 /* Geometry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geometry.swift; sourceTree = "<group>"; };
+		5F17E3A22AD780EF00F402D3 /* ThreadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreadView.swift; sourceTree = "<group>"; };
+		5F17E3A42AD78E1800F402D3 /* TypingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingView.swift; sourceTree = "<group>"; };
+		5F17E3AA2AD7A87700F402D3 /* Sous-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Sous-Bridging-Header.h"; sourceTree = "<group>"; };
+		5F17E3AB2AD7A87700F402D3 /* DDHotKeyCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyCenter.h; sourceTree = "<group>"; };
+		5F17E3AC2AD7A87800F402D3 /* DDHotKeyTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyTextField.h; sourceTree = "<group>"; };
+		5F17E3AD2AD7A87800F402D3 /* DDHotKeyCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyCenter.m; sourceTree = "<group>"; };
+		5F17E3AE2AD7A87800F402D3 /* DDHotKeyTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyTextField.m; sourceTree = "<group>"; };
+		5F17E3AF2AD7A87800F402D3 /* DDHotKeyUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DDHotKeyUtilities.h; sourceTree = "<group>"; };
+		5F17E3B02AD7A87800F402D3 /* DDHotKeyUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DDHotKeyUtilities.m; sourceTree = "<group>"; };
+		5F17E3B62AD7A89700F402D3 /* HotkeySetup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HotkeySetup.h; sourceTree = "<group>"; };
+		5F17E3B72AD7A89700F402D3 /* HotkeySetup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HotkeySetup.m; sourceTree = "<group>"; };
 		5F25980D2AD3337C003AF325 /* Sous.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sous.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5F2598102AD3337C003AF325 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		5F2598122AD3337C003AF325 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		5F2598142AD3337C003AF325 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5F2598172AD3337C003AF325 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		5F2598192AD3337C003AF325 /* Sous.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Sous.entitlements; sourceTree = "<group>"; };
-		5F25981F2AD335A1003AF325 /* WindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowController.swift; sourceTree = "<group>"; };
-		5F2598212AD337CA003AF325 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		5F2598242AD33B0B003AF325 /* View+Measure.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Measure.swift"; sourceTree = "<group>"; };
 		5F2598262AD3516D003AF325 /* InputTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputTextField.swift; sourceTree = "<group>"; };
 		5F2598292AD35BDD003AF325 /* Metal.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Metal.framework; path = System/Library/Frameworks/Metal.framework; sourceTree = SDKROOT; };
@@ -86,6 +97,22 @@
 			path = Tools;
 			sourceTree = "<group>";
 		};
+		5F17E3A92AD7A86D00F402D3 /* DDHotKey */ = {
+			isa = PBXGroup;
+			children = (
+				5F17E3AB2AD7A87700F402D3 /* DDHotKeyCenter.h */,
+				5F17E3AD2AD7A87800F402D3 /* DDHotKeyCenter.m */,
+				5F17E3AC2AD7A87800F402D3 /* DDHotKeyTextField.h */,
+				5F17E3AE2AD7A87800F402D3 /* DDHotKeyTextField.m */,
+				5F17E3AF2AD7A87800F402D3 /* DDHotKeyUtilities.h */,
+				5F17E3B02AD7A87800F402D3 /* DDHotKeyUtilities.m */,
+				5F17E3B62AD7A89700F402D3 /* HotkeySetup.h */,
+				5F17E3B72AD7A89700F402D3 /* HotkeySetup.m */,
+				5F17E3AA2AD7A87700F402D3 /* Sous-Bridging-Header.h */,
+			);
+			path = DDHotKey;
+			sourceTree = "<group>";
+		};
 		5F2598042AD3337C003AF325 = {
 			isa = PBXGroup;
 			children = (
@@ -108,12 +135,12 @@
 			children = (
 				5F2598102AD3337C003AF325 /* AppDelegate.swift */,
 				5F2598382AD38F6E003AF325 /* CopilotSession.swift */,
-				5F2598122AD3337C003AF325 /* ViewController.swift */,
-				5F25981F2AD335A1003AF325 /* WindowController.swift */,
-				5F2598212AD337CA003AF325 /* ContentView.swift */,
-				5F17E3622AD43B1F00F402D3 /* MessageCell.swift */,
 				5F17E3732AD62EE600F402D3 /* OverlayWindowController.swift */,
 				5F17E3752AD62F6F00F402D3 /* OverlayView.swift */,
+				5F17E3A22AD780EF00F402D3 /* ThreadView.swift */,
+				5F17E3622AD43B1F00F402D3 /* MessageCell.swift */,
+				5F17E3A42AD78E1800F402D3 /* TypingView.swift */,
+				5F17E3A92AD7A86D00F402D3 /* DDHotKey */,
 				5F17E3642AD43C3600F402D3 /* Tools */,
 				5F2598232AD33B02003AF325 /* Utils */,
 				5F2598142AD3337C003AF325 /* Assets.xcassets */,
@@ -186,6 +213,7 @@
 				TargetAttributes = {
 					5F25980C2AD3337C003AF325 = {
 						CreatedOnToolsVersion = 15.0;
+						LastSwiftMigration = 1500;
 					};
 				};
 			};
@@ -232,22 +260,25 @@
 				5F17E3662AD43C3C00F402D3 /* Tool.swift in Sources */,
 				5F17E3782AD6390400F402D3 /* Geometry.swift in Sources */,
 				5F2598392AD38F6E003AF325 /* CopilotSession.swift in Sources */,
+				5F17E3A32AD780EF00F402D3 /* ThreadView.swift in Sources */,
+				5F17E3B22AD7A87800F402D3 /* DDHotKeyTextField.m in Sources */,
+				5F17E3B82AD7A89700F402D3 /* HotkeySetup.m in Sources */,
 				5F25983F2AD39E96003AF325 /* ExpandingScrollView.swift in Sources */,
 				5F2598352AD38E83003AF325 /* ArrayUtils.swift in Sources */,
 				5F2598372AD38E83003AF325 /* SeededRandom.swift in Sources */,
 				5F2598332AD38E83003AF325 /* DataStore.swift in Sources */,
 				5F2598362AD38E83003AF325 /* SwiftUIHelpers.swift in Sources */,
 				5F17E3762AD62F6F00F402D3 /* OverlayView.swift in Sources */,
-				5F2598132AD3337C003AF325 /* ViewController.swift in Sources */,
 				5F17E3722AD62ED100F402D3 /* DockUtils.swift in Sources */,
-				5F2598202AD335A1003AF325 /* WindowController.swift in Sources */,
-				5F2598222AD337CA003AF325 /* ContentView.swift in Sources */,
+				5F17E3B32AD7A87800F402D3 /* DDHotKeyUtilities.m in Sources */,
 				5F25983B2AD39C3D003AF325 /* LLM.swift in Sources */,
 				5F2598112AD3337C003AF325 /* AppDelegate.swift in Sources */,
 				5F17E3682AD4425400F402D3 /* CodableHelpers.swift in Sources */,
 				5F17E3742AD62EE600F402D3 /* OverlayWindowController.swift in Sources */,
+				5F17E3A52AD78E1800F402D3 /* TypingView.swift in Sources */,
 				5F2598272AD3516D003AF325 /* InputTextField.swift in Sources */,
 				5F2598252AD33B0B003AF325 /* View+Measure.swift in Sources */,
+				5F17E3B12AD7A87800F402D3 /* DDHotKeyCenter.m in Sources */,
 				5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -389,6 +420,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sous/Sous.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -407,6 +439,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nateparrott.Sous;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sous/DDHotKey/Sous-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -416,6 +450,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Sous/Sous.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -434,6 +469,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.nateparrott.Sous;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Sous/DDHotKey/Sous-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

@@ -30,9 +30,17 @@ class CopilotSession: ObservableObject {
             return
         }
         let toolFunctions = tools.functions
+        let systemPrompt = """
+        You are a virtual assistant, playing the role of a sous chef named Tommy Tortellini.
+        With a jolly and upbeat disposition, help the user with their tasks, using tools to operate their system as appropriate.
+        Address the user as "chef," and acknowledge commands by saying "Yes, chef."
+        Play up your Italian-American heritage and use Italian phrases like "Mamma Mia!"
+        """
 
         Task {
             var messages = initialMessages
+            messages.insert(.init(message: .init(role: .system, content: systemPrompt)), at: 0)
+
             func append(message: LLMMessage) {
                 messages.append(.init(message: message))
                 store.modify { $0.messages.append(.init(message: message)) }

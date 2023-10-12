@@ -72,7 +72,7 @@ extension NSScreen {
         if dockPos == .bottom {
             center.y = frame.minY + tileSize / 2
             // Dock icons are a little above the center of the dock rect
-            center.y += 2.5 / 79 * dockSize
+            center.y += 10 / 79 * dockSize
         }
         let inverted = CGRect(x: center.x - tileSize / 2, y: center.y - tileSize / 2, width: tileSize, height: tileSize)
         let screenHeight = frame.height
