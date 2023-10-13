@@ -15,12 +15,14 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
-    class Window: NSWindow {
+    class Window: NSPanel {
         override var canBecomeKey: Bool { true }
     }
 
     override func loadWindow() {
-        let window = Window(contentRect: NSScreen.main?.frame ?? .init(x: 0, y: 0, width: 500, height: 500), styleMask: [], backing: .buffered, defer: false)
+        let window = Window(contentRect: NSScreen.main?.frame ?? .init(x: 0, y: 0, width: 500, height: 500), styleMask: [.nonactivatingPanel], backing: .buffered, defer: false)
+        window.collectionBehavior = .canJoinAllSpaces
+        window.tabbingMode = .automatic
         window.backgroundColor = NSColor.clear // NSColor.red.withAlphaComponent(0.5)
         window.isOpaque = false
         window.delegate = self

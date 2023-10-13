@@ -2,8 +2,9 @@ import SwiftUI
 
 struct ThreadView: View {
     @ObservedObject var session: CopilotSession
+    var focusTime: Date?
+
     @State private var input = ""
-    @State private var focusDate: Date?
     @State private var inputSize: CGSize = .init(width: 200, height: 21)
     var padding: CGFloat = 16
 
@@ -14,7 +15,7 @@ struct ThreadView: View {
         VStack(alignment: .leading, spacing: 16) {
             answer
 
-            InputTextField(text: $input, options: options, focusDate: focusDate, onEvent: onEvent(_:), contentSize: $inputSize)
+            InputTextField(text: $input, options: options, focusDate: focusTime, onEvent: onEvent(_:), contentSize: $inputSize)
                 .frame(height: inputSize.height)
                 .asBubble(bgColor: Color.blue, fgColor: .white)
         }

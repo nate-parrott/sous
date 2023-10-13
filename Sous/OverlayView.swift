@@ -23,6 +23,7 @@ struct OverlayView: View {
     @State private var visible = false
     @State private var positionOffset: CGPoint = .zero
     @State private var positionOffsetAtStartOfDrag: CGPoint?
+    @State private var focusTime: Date?
 
     var body: some View {
         ZStack {
@@ -60,6 +61,7 @@ struct OverlayView: View {
         .onAppear {
             coordinator.show = {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    self.focusTime = Date()
                     withAnimation(.snappy) {
                         self.visible = true
                     }
@@ -77,7 +79,7 @@ struct OverlayView: View {
     }
 
     @ViewBuilder private var thread: some View {
-        ThreadView(session: coordinator.session)
+        ThreadView(session: coordinator.session, focusTime: focusTime)
             .frame(width: 300)
             .padding(.leading, 128 + 30)
             .padding(.bottom, (128 - 50) / 2)
