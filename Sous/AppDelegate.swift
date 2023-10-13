@@ -7,6 +7,14 @@
 
 import Cocoa
 
+/*
+ TODO:
+ - Streaming
+ - SwiftTerm support: https://github.com/migueldeicaza/SwiftTerm
+ - Web search support
+ - Scroll to bottom
+ - Fix shadow
+ */
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
     let overlayWin = OverlayWindowController()

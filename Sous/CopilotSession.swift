@@ -20,7 +20,6 @@ class CopilotSession: ObservableObject {
     func send(message: String) async {
         let initialMessages = await store.asyncWrite {
             $0.messages.append(.init(message: LLMMessage(role: .user, content: message)))
-            $0.typing = true
             return $0.messages
         }
 
@@ -41,27 +40,41 @@ class CopilotSession: ObservableObject {
             var messages = initialMessages
             messages.insert(.init(message: .init(role: .system, content: systemPrompt)), at: 0)
 
-            func append(message: LLMMessage) {
+            func add(message: LLMMessage, removeLast: Bool) {
+                if removeLast {
+                    messages.removeLast()
+                }
                 messages.append(.init(message: message))
-                store.modify { $0.messages.append(.init(message: message)) }
+                store.modify { 
+                    if removeLast { $0.messages.removeLast() }
+                    $0.messages.append(.init(message: message))
+                }
             }
 
             do {
                 while true {
                     // TODO: truncate prompt
-                    let resp = try await llm.complete(prompt: messages.map(\.message), functions: toolFunctions)
-                    append(message: resp)
-                    if let fn = resp.functionCall {
+                    store.modify { $0.typing = true }
+
+                    var incoming: LLMMessage?
+                    for try await partial in llm.completeStreaming(prompt: messages.map(\.message), functions: toolFunctions) {
+                        let isNew = incoming == nil
+                        add(message: partial, removeLast: !isNew)
+                        incoming = partial
+                        if isNew { // Remove typing indicator
+                            store.modify { $0.typing = false }
+                        }
+                    }
+                    if let fn = incoming?.functionCall {
                         let res = try await self.tools.handle(functionCall: fn)
-                        append(message: .init(role: .function, content: res, nameOfFunctionThatProduced: fn.name))
+                        add(message: .init(role: .function, content: res, nameOfFunctionThatProduced: fn.name), removeLast: false)
                     } else {
                         break
                     }
                 }
-                store.modify { $0.typing = false }
             } catch {
                 let text = "Error: \(error)"
-                append(message: .init(role: .system, content: text))
+                add(message: .init(role: .system, content: text), removeLast: false)
                 store.modify { $0.typing = false }
             }
         }
