@@ -29,7 +29,7 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
 //        window.acceptsMouseMovedEvents = false
 //        window.ignoresMouseEvents = true
         window.level = .screenSaver
-        window.hasShadow = true
+        window.hasShadow = false
         self.window = window
     }
 
@@ -61,5 +61,9 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
 
     @IBAction func clear(_ sender: Any?) {
         coordinator.session.store.modify { $0.messages.removeAll() }
+    }
+
+    @IBAction override func cancelOperation(_ sender: Any?) {
+        coordinator.overlayViewWantsToDismiss?()
     }
 }

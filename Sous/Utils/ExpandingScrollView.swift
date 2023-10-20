@@ -7,7 +7,7 @@ struct ExpandingScrollView<C: View>: View {
     @State private var height: CGFloat?
 
     var body: some View {
-        ScrollView(.vertical) {
+        ScrollView(.vertical, showsIndicators: false) {
             content()
                 .measureSize { self.height = $0.height }
         }

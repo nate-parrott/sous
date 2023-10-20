@@ -25,8 +25,10 @@ struct ThreadView: View {
     }
 
     @ViewBuilder private var answer: some View {
+        let maxHeight: CGFloat = 500
+
         if messagesToShow.count > 0 {
-            ExpandingScrollView(maxHeight: 500) {
+            ExpandingScrollView(maxHeight: maxHeight) {
                 VStack(alignment: .leading, spacing: 16) {
                     ForEachUnidentifiable(items: messageViewModels) { vm in
                         MessageView(model: vm)
@@ -34,7 +36,19 @@ struct ThreadView: View {
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(20)
             }
+            .mask(alignment: .bottom) {
+                LinearGradient(stops: [
+                    .init(color: Color.clear, location: 0),
+                    .init(color: Color.black, location: 0.2),
+                    .init(color: Color.black, location: 0.97),
+                    .init(color: Color.clear, location: 1)
+                ], startPoint: .top, endPoint: .bottom)
+                .frame(height: maxHeight)
+            }
+            .padding(-20)
+            .background(Color.white.opacity(0.01))
 //            .animation(.snappy, value: messagesToShow)
         }
     }
@@ -81,29 +95,8 @@ struct ThreadView: View {
     }
 }
 
-extension Font {
-    static var chatFont: Font {
-        .system(size: 15)
-    }
-}
-
-extension NSFont {
-    static var chatFont: NSFont {
-        .systemFont(ofSize: 15)
-    }
-}
-
-extension View {
-    @ViewBuilder func asBubble(bgColor: Color, fgColor: Color) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
-
-        self
-        .background(bgColor.opacity(0.8))
-        .background(.regularMaterial)
-        .clipShape(shape)
-        .overlay {
-            shape.strokeBorder(fgColor.opacity(0.1), lineWidth: 0.5)
-        }
-        .foregroundColor(fgColor)
-    }
+#Preview {
+    ThreadView(session: OverlayViewCoordinator.stubForPreviews.session, focusTime: Date())
+        .frame(width: 300, height: 500)
+        .padding(40)
 }

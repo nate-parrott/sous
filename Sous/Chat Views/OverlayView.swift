@@ -57,6 +57,7 @@ struct OverlayView: View {
                 }
             }
         }
+//        .shadow(color: Color.black.opacity(0.5), radius: 20, x: 0, y: 5)
         .frame(width: coordinator.windowSize.width, height: coordinator.windowSize.height)
         .onAppear {
             coordinator.show = {
@@ -86,4 +87,20 @@ struct OverlayView: View {
             .opacity(visible ? 1 : 0)
             .scaleEffect(visible ? 1 : 0.1)
     }
+}
+
+extension OverlayViewCoordinator {
+    static var stubForPreviews: OverlayViewCoordinator = {
+        let c = OverlayViewCoordinator()
+        c.windowSize = .init(width: 1000, height: 600)
+        DispatchQueue.main.async {
+            c.show?()
+        }
+        return c
+    }()
+}
+
+#Preview {
+    OverlayView(coordinator: .stubForPreviews)
+        .padding(.leading, -400)
 }
