@@ -79,7 +79,7 @@ class ApplescriptTool: Tool {
         if let params = call.argumentsJson as? [String: String], let script = params["script"] {
             return MessageBodyViewModel.run(code: script, kind: "AppleScript")
         }
-        return nil
+        return MessageBodyViewModel.run(code: "", kind: "AppleScript")
     }
 }
 
@@ -109,41 +109,6 @@ class JavascriptTool: Tool {
         if let params = call.argumentsJson as? [String: String], let expr = params["expr"] {
             return MessageBodyViewModel.run(code: expr, kind: "JavaScript")
         }
-        return nil
+        return MessageBodyViewModel.run(code: "", kind: "JavaScript")
     }
 }
-
-//
-//let jsCtx = JSContext()!
-//
-//var functions: [LLMFunction] {
-//    [
-//        LLMFunction(name: "eval", description: "Executes a JS expression and returns the result. Use for math, text manipulation, logic, etc.", parameters: ["expr": .string(description: "JS expression or self-calling function")]),
-//        LLMFunction(name: "appleScript", description: "Evaluate AppleScript to perform operations on the user's system", parameters: ["script": .string(description: nil)])
-//    ]
-//}
-//
-
-//
-//private func handle(functionCall: LLMMessage.FunctionCall) async throws -> String {
-//    switch functionCall.name {
-//    case "eval":
-//        if let params = functionCall.argumentsJson as? [String: String], let expr = params["expr"] {
-//            let res = jsCtx.evaluateScript(expr)!
-//            return res.toString()
-//        } else {
-//            throw ToolError.wrongArgs
-//        }
-//    case "appleScript":
-//        if let params = functionCall.argumentsJson as? [String: String], let script = params["script"] {
-//            #if os(macOS)
-//            return try await Scripting.runAppleScript(script: script) ?? "(No result)"
-//            #else
-//            throw ToolError.unavailable
-//            #endif
-//        } else {
-//            throw ToolError.wrongArgs
-//        }
-//    default: throw ToolError.unknownTool
-//    }
-//}

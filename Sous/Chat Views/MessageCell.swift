@@ -64,7 +64,8 @@ enum MessageBodyViewModel: Equatable, Codable {
             if let vm = tools.viewModel(fromFunctionCall: functionCall) {
                 models.append(vm)
             } else {
-                models.append(.unknown(functionCall.prettyPrintedJson()))
+                models.append(.toolUsePlaceholder(text: "Using tool...", icon: "gearshape.arrow.triangle.2.circlepath"))
+//                models.append(.unknown(functionCall.prettyPrintedJson()))
             }
         }
         return models
