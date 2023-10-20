@@ -5,8 +5,7 @@ import JavaScriptCore
 protocol Tool {
     var functions: [LLMFunction] { get }
 
-    // Return true if handled
-    func handle(functionCall: LLMMessage.FunctionCall) async throws -> String?
+    func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error>
 
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel?
 }
@@ -16,6 +15,12 @@ enum ToolError: Error {
    case wrongArgs
    case unavailable
 }
+
+struct ToolResponse: Equatable {
+    var string: String
+    var data: StructuredResponse?
+}
+
 
 class Tools {
     init() {
@@ -31,13 +36,15 @@ class Tools {
         tools.flatMap { $0.functions }
     }
 
-    func handle(functionCall: LLMMessage.FunctionCall) async throws -> String {
-        if let tool = self.tool(forFunctionName: functionCall.name) {
-            if let res = try await tool.handle(functionCall: functionCall) {
-                return res
+    func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error> {
+        .just {
+            if let tool = self.tool(forFunctionName: functionCall.name) {
+                for try await partial in tool.handle(functionCall: functionCall) {
+                    return partial
+                }
             }
+            throw ToolError.wrongArgs
         }
-        throw ToolError.wrongArgs
     }
 
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel? {
@@ -59,19 +66,22 @@ class ApplescriptTool: Tool {
         ]
     }
 
-    func handle(functionCall: LLMMessage.FunctionCall) async throws -> String? {
-        switch functionCall.name {
-        case "appleScript":
-            if let params = functionCall.argumentsJson as? [String: String], let script = params["script"] {
-                #if os(macOS)
-                return try await Scripting.runAppleScript(script: script) ?? "(No result)"
-                #else
-                throw ToolError.unavailable
-                #endif
-            } else {
-                throw ToolError.wrongArgs
+    func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error> {
+        .just {
+            switch functionCall.name {
+            case "appleScript":
+                if let params = functionCall.argumentsJson as? [String: String], let script = params["script"] {
+                    #if os(macOS)
+                    let str = try await Scripting.runAppleScript(script: script) ?? "(No result)"
+                    return .init(string: str)
+                    #else
+                    throw ToolError.unavailable
+                    #endif
+                } else {
+                    throw ToolError.wrongArgs
+                }
+            default: return nil
             }
-        default: return nil
         }
     }
 
@@ -92,19 +102,20 @@ class JavascriptTool: Tool {
 
     let jsCtx = JSContext()!
 
-    func handle(functionCall: LLMMessage.FunctionCall) async throws -> String? {
-        switch functionCall.name {
-        case "eval":
-            if let params = functionCall.argumentsJson as? [String: String], let expr = params["expr"] {
-                let res = jsCtx.evaluateScript(expr)!
-                return res.toString()
-            } else {
-                throw ToolError.wrongArgs
+    func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error> {
+        .just {
+            switch functionCall.name {
+            case "eval":
+                if let params = functionCall.argumentsJson as? [String: String], let expr = params["expr"] {
+                    let res = self.jsCtx.evaluateScript(expr)!
+                    return .init(string: res.toString())
+                } else {
+                    throw ToolError.wrongArgs
+                }
+            default: return nil
             }
-        default: return nil
         }
     }
-
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel? {
         if let params = call.argumentsJson as? [String: String], let expr = params["expr"] {
             return MessageBodyViewModel.run(code: expr, kind: "JavaScript")
@@ -112,3 +123,36 @@ class JavascriptTool: Tool {
         return MessageBodyViewModel.run(code: "", kind: "JavaScript")
     }
 }
+
+//class ButtonsTool: Tool {
+//    var functions: [LLMFunction] {
+//        [
+//            LLMFunction(
+//                name: "buttons",
+//                description: "Use this tool when you need multiple-choice answers from the user, or want to suggest follow-up actions.", parameters: ["q": .string(description: "Question to ask user"), "buttons": .array(description: "Array of 1-3 concise answers", itemType: .string(description: nil))]
+//            )
+//        ]
+//    }
+//
+//    let jsCtx = JSContext()!
+//
+//    func handle(functionCall: LLMMessage.FunctionCall) async throws -> String? {
+//        switch functionCall.name {
+//        case "eval":
+//            if let params = functionCall.argumentsJson as? [String: String], let expr = params["expr"] {
+//                let res = jsCtx.evaluateScript(expr)!
+//                return res.toString()
+//            } else {
+//                throw ToolError.wrongArgs
+//            }
+//        default: return nil
+//        }
+//    }
+//
+//    func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel? {
+//        if let params = call.argumentsJson as? [String: String], let expr = params["expr"] {
+//            return MessageBodyViewModel.run(code: expr, kind: "JavaScript")
+//        }
+//        return MessageBodyViewModel.run(code: "", kind: "JavaScript")
+//    }
+//}

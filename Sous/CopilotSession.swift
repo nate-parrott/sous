@@ -5,9 +5,21 @@ import JavaScriptCore
 struct CopilotState: Equatable, Codable {
     struct Message: Equatable, Codable {
         var message: LLMMessage
+        var structuredResponse: StructuredResponse? // For function-call responses
     }
     var messages: [Message] = []
     var typing = false
+}
+
+struct StructuredResponse: Equatable, Codable {
+    var webSearch: WebSearchToolResponse?
+
+    var asString: String {
+        if let webSearch {
+            return webSearch.asString
+        }
+        return "?"
+    }
 }
 
 class CopilotDataStore: DataStore<CopilotState> {}
@@ -40,14 +52,14 @@ class CopilotSession: ObservableObject {
             var messages = initialMessages
             messages.insert(.init(message: .init(role: .system, content: systemPrompt)), at: 0)
 
-            func add(message: LLMMessage, removeLast: Bool) {
+            func add(message: CopilotState.Message, removeLast: Bool) {
                 if removeLast {
                     messages.removeLast()
                 }
-                messages.append(.init(message: message))
-                store.modify { 
+                messages.append(message)
+                store.modify {
                     if removeLast { $0.messages.removeLast() }
-                    $0.messages.append(.init(message: message))
+                    $0.messages.append(message)
                 }
             }
 
@@ -59,22 +71,32 @@ class CopilotSession: ObservableObject {
                     var incoming: LLMMessage?
                     for try await partial in llm.completeStreaming(prompt: messages.map(\.message), functions: toolFunctions) {
                         let isNew = incoming == nil
-                        add(message: partial, removeLast: !isNew)
+                        add(message: .init(message: partial), removeLast: !isNew)
                         incoming = partial
                         if isNew { // Remove typing indicator
                             store.modify { $0.typing = false }
                         }
                     }
                     if let fn = incoming?.functionCall {
-                        let res = try await self.tools.handle(functionCall: fn)
-                        add(message: .init(role: .function, content: res, nameOfFunctionThatProduced: fn.name), removeLast: false)
+                        var didAddFunctionResponse = false
+                        for try await partialResponse in self.tools.handle(functionCall: fn) {
+                            if let partialResponse {
+                                add(message: .init(message: LLMMessage(role: .function, content: partialResponse.string, nameOfFunctionThatProduced: fn.name), structuredResponse: partialResponse.data), removeLast: didAddFunctionResponse)
+                                didAddFunctionResponse = true
+                            }
+                        }
+                        // Some tools return a response and are finished, in which case the model can continue.
+                        // Others, like interactive buttons, return control to the user before the model.
+                        if !didAddFunctionResponse {
+                            break
+                        }
                     } else {
                         break
                     }
                 }
             } catch {
                 let text = "Error: \(error)"
-                add(message: .init(role: .system, content: text), removeLast: false)
+                add(message: .init(message: LLMMessage(role: .system, content: text)), removeLast: false)
                 store.modify { $0.typing = false }
             }
         }

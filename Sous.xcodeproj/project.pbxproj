@@ -37,6 +37,7 @@
 		5F25983B2AD39C3D003AF325 /* LLM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25983A2AD39C3D003AF325 /* LLM.swift */; };
 		5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25983C2AD39D55003AF325 /* Scripting.swift */; };
 		5F25983F2AD39E96003AF325 /* ExpandingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25983E2AD39E96003AF325 /* ExpandingScrollView.swift */; };
+		5FD696D12AE32A9100DB4729 /* WebSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D02AE32A9100DB4729 /* WebSearch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -76,6 +77,7 @@
 		5F25983A2AD39C3D003AF325 /* LLM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLM.swift; sourceTree = "<group>"; };
 		5F25983C2AD39D55003AF325 /* Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scripting.swift; sourceTree = "<group>"; };
 		5F25983E2AD39E96003AF325 /* ExpandingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingScrollView.swift; sourceTree = "<group>"; };
+		5FD696D02AE32A9100DB4729 /* WebSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSearch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -95,6 +97,7 @@
 			isa = PBXGroup;
 			children = (
 				5F17E3652AD43C3C00F402D3 /* Tool.swift */,
+				5FD696D02AE32A9100DB4729 /* WebSearch.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -278,6 +281,7 @@
 				5F17E3632AD43B1F00F402D3 /* MessageCell.swift in Sources */,
 				5F17E3662AD43C3C00F402D3 /* Tool.swift in Sources */,
 				5F17E3782AD6390400F402D3 /* Geometry.swift in Sources */,
+				5FD696D12AE32A9100DB4729 /* WebSearch.swift in Sources */,
 				5F2598392AD38F6E003AF325 /* CopilotSession.swift in Sources */,
 				5F17E3A32AD780EF00F402D3 /* ThreadView.swift in Sources */,
 				5F17E3B22AD7A87800F402D3 /* DDHotKeyTextField.m in Sources */,
