@@ -47,9 +47,8 @@ enum MessageBodyViewModel: Equatable, Codable {
             // Split message content on full-line code block boundaries using regex that matches ``` on its own line
 //            let codeBlockRegex = try! NSRegularExpression(pattern: "^```$", options: [.anchorsMatchLines])
             let split = ("\n" + message.message.content + "\n")
-                .components(separatedBy: "\n```\n")
+                .splitOn(regex: "\n```[A-Za-z_0-9]*\n")
                 .map { $0.trimmingCharacters(in: .whitespacesAndNewlines) }
-            // .splitOn(regex: try! NSRegularExpression(pattern: "^```$", options: .anchorsMatchLines)) // message.message.content.split(separator: /[^\n]```[$\n]/)
             for (i, part) in split.enumerated() {
                 if i % 2 == 0 {
                     // markdown
@@ -151,26 +150,27 @@ private struct CodeBlockView: View {
     }
 }
 //
-//extension String {
-//    func splitOn(regex: NSRegularExpression) -> [String] {
-//        do {
-//            let regex = try NSRegularExpression(pattern: "[^\\n]```[$\\n]")
-//            let ranges = regex.matches(in: self, options: [], range: NSRange(location: 0, length: utf16.count)).map { $0.range }
-//
-//            var lastEnd = startIndex
-//            var results: [Substring] = []
-//
-//            for range in ranges {
-//                let rangeStart = Range(range, in: self)!.lowerBound
-//                results.append(self[lastEnd..<rangeStart])
-//                lastEnd = Range(range, in: self)!.upperBound
-//            }
-//            results.append(self[lastEnd..<endIndex])
-//
-//            return results.map { String($0) }
-//        } catch {
-//            print("Invalid regex: \(error.localizedDescription)")
-//            return [self]
-//        }
-//    }
-//}
+extension String {
+    func splitOn(regex: String) -> [String] {
+        do {
+            let toSearch: NSString = self as NSString
+
+            let pattern = regex
+            let regex = try NSRegularExpression(pattern: pattern, options: [])
+
+            let matches = regex.matches(in: toSearch as String, range: NSRange(location: 0, length: toSearch.length))
+
+            var results = [String]()
+            var lastIndex: Int = 0
+            for match in matches {
+                results.append(toSearch.substring(with: .init(location: lastIndex, length: match.range.lowerBound - lastIndex)))
+                lastIndex = match.range.upperBound
+            }
+            results.append(toSearch.substring(with: .init(location: lastIndex, length: toSearch.length - lastIndex)))
+            return results
+        } catch {
+            print("Invalid regex: \(error.localizedDescription)")
+            return [self]
+        }
+    }
+}
