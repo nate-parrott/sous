@@ -4,12 +4,10 @@ import JavaScriptCore
 
 protocol Tool {
     var functions: [LLMFunction] { get }
-
     func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error>
-
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel?
-
     func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel?
+    func getContext() async -> (String, [ContextData])?
 }
 
 enum ToolError: Error {
@@ -32,6 +30,7 @@ class Tools {
             ApplescriptTool(),
             JavascriptTool(),
             WebSearchTool(),
+            TerminalTool(),
         ]
     }
 
@@ -65,6 +64,8 @@ class Tools {
     private func tool(forFunctionName name: String) -> Tool? {
         tools.first { $0.functions.contains { $0.name == name } }
     }
+
+    func getContext() async -> (String, [ContextData])? { return nil }
 }
 
 class ApplescriptTool: Tool {
@@ -79,7 +80,7 @@ class ApplescriptTool: Tool {
             switch functionCall.name {
             case "appleScript":
                 if let params = functionCall.argumentsJson as? [String: String], let script = params["script"] {
-                    #if os(macOS)
+#if os(macOS)
                     let str = try await Scripting.runAppleScript(script: script) ?? "(No result)"
                     return .text(str)
                     #else
@@ -103,6 +104,8 @@ class ApplescriptTool: Tool {
     func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel? {
         return nil
     }
+
+    func getContext() async -> (String, [ContextData])? { return nil }
 }
 
 class JavascriptTool: Tool {
@@ -138,6 +141,8 @@ class JavascriptTool: Tool {
     func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel? {
         return nil
     }
+
+    func getContext() async -> (String, [ContextData])? { return nil }
 }
 
 //class ButtonsTool: Tool {

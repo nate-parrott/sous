@@ -42,6 +42,8 @@
 		5FD696D52AE47C8F00DB4729 /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */; };
 		5FD696D72AE47F1700DB4729 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D62AE47F1700DB4729 /* Async.swift */; };
 		5FD696D92AE4800200DB4729 /* AsyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D82AE4800200DB4729 /* AsyncMap.swift */; };
+		5FD696DB2AE48FE900DB4729 /* BrowserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DA2AE48FE900DB4729 /* BrowserTool.swift */; };
+		5FD696DD2AE4909A00DB4729 /* TerminalTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DC2AE4909A00DB4729 /* TerminalTool.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +88,8 @@
 		5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 		5FD696D62AE47F1700DB4729 /* Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
 		5FD696D82AE4800200DB4729 /* AsyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncMap.swift; sourceTree = "<group>"; };
+		5FD696DA2AE48FE900DB4729 /* BrowserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTool.swift; sourceTree = "<group>"; };
+		5FD696DC2AE4909A00DB4729 /* TerminalTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTool.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,8 @@
 			children = (
 				5F17E3652AD43C3C00F402D3 /* Tool.swift */,
 				5FD696D02AE32A9100DB4729 /* WebSearch.swift */,
+				5FD696DA2AE48FE900DB4729 /* BrowserTool.swift */,
+				5FD696DC2AE4909A00DB4729 /* TerminalTool.swift */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -317,7 +323,9 @@
 				5F17E3A52AD78E1800F402D3 /* TypingView.swift in Sources */,
 				5F2598272AD3516D003AF325 /* InputTextField.swift in Sources */,
 				5F2598252AD33B0B003AF325 /* View+Measure.swift in Sources */,
+				5FD696DB2AE48FE900DB4729 /* BrowserTool.swift in Sources */,
 				5F17E3B12AD7A87800F402D3 /* DDHotKeyCenter.m in Sources */,
+				5FD696DD2AE4909A00DB4729 /* TerminalTool.swift in Sources */,
 				5FD696D72AE47F1700DB4729 /* Async.swift in Sources */,
 				5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */,
 			);

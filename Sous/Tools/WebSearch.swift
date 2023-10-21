@@ -82,6 +82,8 @@ class WebSearchTool: Tool {
         }
         return nil
     }
+    
+    func getContext() async -> (String, [ContextData])? { return nil }
 }
 
 func fetchPageContent(url: URL, charLimit: Int) async throws -> String {

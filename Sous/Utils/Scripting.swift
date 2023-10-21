@@ -12,7 +12,8 @@ enum Scripting {
     private static let scriptQueue = DispatchQueue(label: "Scripting", qos: .userInitiated, attributes: .concurrent)
 
     static func runAppleScript(script: String) async throws -> String? {
-        try await withCheckedThrowingContinuation { cont in
+        print("[Applescript] \(script)")
+        return try await withCheckedThrowingContinuation { cont in
             self.scriptQueue.async {
                 var error: NSDictionary?
                 guard let scriptObject = NSAppleScript(source: script) else {
@@ -91,6 +92,8 @@ extension NSAppleEventDescriptor {
             return stringValue
         case typeSInt32:
             return String(int32Value)
+        case typeTrue: return "true"
+        case typeFalse: return "false"
         case typeBoolean:
             return String(booleanValue)
         case typeAEList:
@@ -122,3 +125,13 @@ extension NSAppleEventDescriptor {
 }
 
 #endif
+
+extension String {
+    var quotedForApplescript: String {
+        // TODO: DO better
+        let esc = replacingOccurrences(of: "\\", with: "\\\\")
+            .replacingOccurrences(of: "\"", with: "\\\"")
+        return "\"\(esc)\""
+//        jsonString // is this correct??
+    }
+}
