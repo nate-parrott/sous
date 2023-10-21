@@ -9,7 +9,7 @@ struct MessageViewModel: Equatable, Codable {
     static func from(messages: [CopilotState.Message], tools: Tools, typing: Bool, collapseToolUse: Bool = true) -> [Self] {
 
         var messages: [MessageViewModel] = messages.flatMap { msg in
-            let bodies = MessageBodyViewModel.from(message: msg, tools: tools, collapseToolUse: collapseToolUse)
+            let bodies = MessageBodyViewModel.from(message: msg, tools: tools)
             return bodies
                 .compactMap { body -> MessageBodyViewModel? in
                     if collapseToolUse {
@@ -37,11 +37,18 @@ enum MessageBodyViewModel: Equatable, Codable {
     case run(code: String, kind: String)
     case codeOutput(String)
     case toolUsePlaceholder(text: String, icon: String)
+    case searchResponse(WebSearchResponse)
     case unknown(String)
     case typing
 
-    static func from(message: CopilotState.Message, tools: Tools, collapseToolUse: Bool) -> [Self] {
-        if collapseToolUse, message.message.role == .function { return [] }
+    static func from(message: CopilotState.Message, tools: Tools) -> [Self] {
+        if message.message.role == .function {
+            if let model = tools.viewModel(fromFunctionCallResponse: message) {
+                return [model]
+            }
+            return []
+        }
+
         var models = [Self]()
         if message.message.content != "" {
             // Split message content on full-line code block boundaries using regex that matches ``` on its own line
@@ -107,6 +114,8 @@ struct MessageBodyView: View {
                 Text(text)
             }
             .asStandardMessageText
+        case .searchResponse(let res):
+            SearchResponseView(result: res)
         }
     }
 }

@@ -38,6 +38,10 @@
 		5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25983C2AD39D55003AF325 /* Scripting.swift */; };
 		5F25983F2AD39E96003AF325 /* ExpandingScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F25983E2AD39E96003AF325 /* ExpandingScrollView.swift */; };
 		5FD696D12AE32A9100DB4729 /* WebSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D02AE32A9100DB4729 /* WebSearch.swift */; };
+		5FD696D32AE47A7500DB4729 /* ContextData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D22AE47A7500DB4729 /* ContextData.swift */; };
+		5FD696D52AE47C8F00DB4729 /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */; };
+		5FD696D72AE47F1700DB4729 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D62AE47F1700DB4729 /* Async.swift */; };
+		5FD696D92AE4800200DB4729 /* AsyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D82AE4800200DB4729 /* AsyncMap.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -78,6 +82,10 @@
 		5F25983C2AD39D55003AF325 /* Scripting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Scripting.swift; sourceTree = "<group>"; };
 		5F25983E2AD39E96003AF325 /* ExpandingScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpandingScrollView.swift; sourceTree = "<group>"; };
 		5FD696D02AE32A9100DB4729 /* WebSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSearch.swift; sourceTree = "<group>"; };
+		5FD696D22AE47A7500DB4729 /* ContextData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextData.swift; sourceTree = "<group>"; };
+		5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
+		5FD696D62AE47F1700DB4729 /* Async.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Async.swift; sourceTree = "<group>"; };
+		5FD696D82AE4800200DB4729 /* AsyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncMap.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +132,7 @@
 				5F17E3752AD62F6F00F402D3 /* OverlayView.swift */,
 				5F17E3A22AD780EF00F402D3 /* ThreadView.swift */,
 				5F17E3622AD43B1F00F402D3 /* MessageCell.swift */,
+				5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */,
 			);
 			path = "Chat Views";
 			sourceTree = "<group>";
@@ -159,6 +168,7 @@
 			children = (
 				5F2598102AD3337C003AF325 /* AppDelegate.swift */,
 				5F2598382AD38F6E003AF325 /* CopilotSession.swift */,
+				5FD696D22AE47A7500DB4729 /* ContextData.swift */,
 				5F17E3732AD62EE600F402D3 /* OverlayWindowController.swift */,
 				5F1C95552ADB1BAF009E312E /* Chat Views */,
 				5F1C95562ADB1BBC009E312E /* Util Views */,
@@ -177,6 +187,8 @@
 			children = (
 				5F2598302AD38E83003AF325 /* ArrayUtils.swift */,
 				5F25982E2AD38E83003AF325 /* DataStore.swift */,
+				5FD696D62AE47F1700DB4729 /* Async.swift */,
+				5FD696D82AE4800200DB4729 /* AsyncMap.swift */,
 				5F25983A2AD39C3D003AF325 /* LLM.swift */,
 				5F2598322AD38E83003AF325 /* SeededRandom.swift */,
 				5F25982F2AD38E83003AF325 /* StringHelpers.swift */,
@@ -280,6 +292,7 @@
 				5F2598342AD38E83003AF325 /* StringHelpers.swift in Sources */,
 				5F17E3632AD43B1F00F402D3 /* MessageCell.swift in Sources */,
 				5F17E3662AD43C3C00F402D3 /* Tool.swift in Sources */,
+				5FD696D92AE4800200DB4729 /* AsyncMap.swift in Sources */,
 				5F17E3782AD6390400F402D3 /* Geometry.swift in Sources */,
 				5FD696D12AE32A9100DB4729 /* WebSearch.swift in Sources */,
 				5F2598392AD38F6E003AF325 /* CopilotSession.swift in Sources */,
@@ -288,6 +301,7 @@
 				5F17E3B82AD7A89700F402D3 /* HotkeySetup.m in Sources */,
 				5F25983F2AD39E96003AF325 /* ExpandingScrollView.swift in Sources */,
 				5F2598352AD38E83003AF325 /* ArrayUtils.swift in Sources */,
+				5FD696D32AE47A7500DB4729 /* ContextData.swift in Sources */,
 				5F2598372AD38E83003AF325 /* SeededRandom.swift in Sources */,
 				5F2598332AD38E83003AF325 /* DataStore.swift in Sources */,
 				5F2598362AD38E83003AF325 /* SwiftUIHelpers.swift in Sources */,
@@ -298,11 +312,13 @@
 				5F25983B2AD39C3D003AF325 /* LLM.swift in Sources */,
 				5F2598112AD3337C003AF325 /* AppDelegate.swift in Sources */,
 				5F17E3682AD4425400F402D3 /* CodableHelpers.swift in Sources */,
+				5FD696D52AE47C8F00DB4729 /* SearchResultView.swift in Sources */,
 				5F17E3742AD62EE600F402D3 /* OverlayWindowController.swift in Sources */,
 				5F17E3A52AD78E1800F402D3 /* TypingView.swift in Sources */,
 				5F2598272AD3516D003AF325 /* InputTextField.swift in Sources */,
 				5F2598252AD33B0B003AF325 /* View+Measure.swift in Sources */,
 				5F17E3B12AD7A87800F402D3 /* DDHotKeyCenter.m in Sources */,
+				5FD696D72AE47F1700DB4729 /* Async.swift in Sources */,
 				5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

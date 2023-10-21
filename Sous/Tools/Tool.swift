@@ -8,6 +8,8 @@ protocol Tool {
     func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error>
 
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel?
+
+    func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel?
 }
 
 enum ToolError: Error {
@@ -16,17 +18,20 @@ enum ToolError: Error {
    case unavailable
 }
 
-struct ToolResponse: Equatable {
-    var string: String
-    var data: StructuredResponse?
+extension AsyncThrowingStream where Failure == Error {
+    static func justThrow(_ error: Error) -> AsyncThrowingStream<Element, Error> {
+        .just {
+            throw error
+        }
+    }
 }
-
 
 class Tools {
     init() {
         tools = [
             ApplescriptTool(),
-            JavascriptTool()
+            JavascriptTool(),
+            WebSearchTool(),
         ]
     }
 
@@ -37,19 +42,22 @@ class Tools {
     }
 
     func handle(functionCall: LLMMessage.FunctionCall) -> AsyncThrowingStream<ToolResponse?, Error> {
-        .just {
-            if let tool = self.tool(forFunctionName: functionCall.name) {
-                for try await partial in tool.handle(functionCall: functionCall) {
-                    return partial
-                }
-            }
-            throw ToolError.wrongArgs
+        if let tool = self.tool(forFunctionName: functionCall.name) {
+            return tool.handle(functionCall: functionCall)
         }
+        return .justThrow(ToolError.wrongArgs)
     }
 
     func viewModel(fromFunctionCall call: LLMMessage.FunctionCall) -> MessageBodyViewModel? {
         if let tool = self.tool(forFunctionName: call.name) {
             return tool.viewModel(fromFunctionCall: call)
+        }
+        return nil
+    }
+
+    func viewModel(fromFunctionCallResponse call: CopilotState.Message) -> MessageBodyViewModel? {
+        if let id = call.message.nameOfFunctionThatProduced, let tool = self.tool(forFunctionName: id), let toolResponse = call.toolResponse {
+            return tool.viewModel(fromToolResponse: toolResponse)
         }
         return nil
     }
@@ -73,7 +81,7 @@ class ApplescriptTool: Tool {
                 if let params = functionCall.argumentsJson as? [String: String], let script = params["script"] {
                     #if os(macOS)
                     let str = try await Scripting.runAppleScript(script: script) ?? "(No result)"
-                    return .init(string: str)
+                    return .text(str)
                     #else
                     throw ToolError.unavailable
                     #endif
@@ -90,6 +98,10 @@ class ApplescriptTool: Tool {
             return MessageBodyViewModel.run(code: script, kind: "AppleScript")
         }
         return MessageBodyViewModel.run(code: "", kind: "AppleScript")
+    }
+
+    func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel? {
+        return nil
     }
 }
 
@@ -108,7 +120,7 @@ class JavascriptTool: Tool {
             case "eval":
                 if let params = functionCall.argumentsJson as? [String: String], let expr = params["expr"] {
                     let res = self.jsCtx.evaluateScript(expr)!
-                    return .init(string: res.toString())
+                    return .text(res.toString())
                 } else {
                     throw ToolError.wrongArgs
                 }
@@ -121,6 +133,10 @@ class JavascriptTool: Tool {
             return MessageBodyViewModel.run(code: expr, kind: "JavaScript")
         }
         return MessageBodyViewModel.run(code: "", kind: "JavaScript")
+    }
+
+    func viewModel(fromToolResponse toolResponse: ToolResponse) -> MessageBodyViewModel? {
+        return nil
     }
 }
 

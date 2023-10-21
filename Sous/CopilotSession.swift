@@ -5,20 +5,27 @@ import JavaScriptCore
 struct CopilotState: Equatable, Codable {
     struct Message: Equatable, Codable {
         var message: LLMMessage
-        var structuredResponse: StructuredResponse? // For function-call responses
+        var toolResponse: ToolResponse? // For function-call responses
     }
     var messages: [Message] = []
     var typing = false
 }
 
-struct StructuredResponse: Equatable, Codable {
-    var webSearch: WebSearchToolResponse?
+enum ToolResponse: Equatable, Codable {
+    case text(String)
+    case webSearch(WebSearchToolResponse)
+
+    var asContextData: [ContextData] {
+        switch self {
+        case .text(let string):
+            return [ContextData(text: string, isToolOutput: true)]
+        case .webSearch(let webSearchToolResponse):
+            return webSearchToolResponse.asContextData
+        }
+    }
 
     var asString: String {
-        if let webSearch {
-            return webSearch.asString
-        }
-        return "?"
+        asContextData.map(\.allText).joined(separator: "\n")
     }
 }
 
@@ -80,11 +87,13 @@ class CopilotSession: ObservableObject {
                     if let fn = incoming?.functionCall {
                         var didAddFunctionResponse = false
                         for try await partialResponse in self.tools.handle(functionCall: fn) {
+                            print("[cf] Got response")
                             if let partialResponse {
-                                add(message: .init(message: LLMMessage(role: .function, content: partialResponse.string, nameOfFunctionThatProduced: fn.name), structuredResponse: partialResponse.data), removeLast: didAddFunctionResponse)
+                                add(message: .init(message: LLMMessage(role: .function, content: partialResponse.asString, nameOfFunctionThatProduced: fn.name), toolResponse: partialResponse), removeLast: didAddFunctionResponse)
                                 didAddFunctionResponse = true
                             }
                         }
+                        print("[cf] Continuing...")
                         // Some tools return a response and are finished, in which case the model can continue.
                         // Others, like interactive buttons, return control to the user before the model.
                         if !didAddFunctionResponse {
