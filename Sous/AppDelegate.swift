@@ -7,35 +7,22 @@
 
 import Cocoa
 
-/*
- TODO:
- - Streaming
- - SwiftTerm support: https://github.com/migueldeicaza/SwiftTerm
- - Web search support
- - Scroll to bottom
- - Fix shadow
- */
 @main
 class AppDelegate: NSObject, NSApplicationDelegate {
-    let overlayWin = OverlayWindowController()
+    static var shared: AppDelegate {
+        NSApp.delegate as! AppDelegate
+    }
+
+    let overlayWindowCoordinator = OverlayWindowCoordinator()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
-//        overlayWin.window!.makeKeyAndOrderFront(nil)
-
-        if let screen = NSScreen.main {
-            overlayWin.coordinator.dockRect = .init(center: CGPoint(x: screen.frame.midX, y: screen.frame.maxY + 100), size: CGSize(width: 60, height: 60))
-        }
-
-        overlayWin.coordinator.overlayViewWantsToDismiss = { [weak self] in
-            self?.setVisible(false)
-        }
-
-        setVisible(true)
+        overlayWindowCoordinator.initialSetup()
+        overlayWindowCoordinator.setVisible(true)
 
         HotkeySetup.registerGlobalHotkey { [weak self] in
             DispatchQueue.main.async {
-                self?.toggleVisible()
+                self?.overlayWindowCoordinator.toggleVisible()
             }
         }
     }
@@ -50,21 +37,34 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     // when dock icon is clicked, get or creare main window from storyboard
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {
-        dockIconClicked()
-//        if let win = overlayWin.window {
-//            win.setIsVisible(!win.isVisible)
-//        }
-//        if let win = NSApp.windows.last(where: { ($0 as? FloatingPanel) != nil }) {
-//            win.makeKeyAndOrderFront(nil)
-//        } else {
-//            let storyboard = NSStoryboard(name: "Main", bundle: nil)
-//            let controller = storyboard.instantiateInitialController() as! WindowController
-//            controller.showWindow(self)
-//        }
+        overlayWindowCoordinator.dockIconClicked()
         return true
     }
 
+    @IBAction func showPreferences(_ sender: Any?) {
+        NSApp.activate()
+        if let existing = NSApp.windows.compactMap({ $0 as? PreferenceWindow }).first {
+            existing.makeKeyAndOrderFront(sender)
+        } else {
+            let window = PreferenceWindow()
+            window.makeKeyAndOrderFront(sender)
+        }
+    }
+}
+
+class OverlayWindowCoordinator {
     // MARK: - Lifecycle
+    @MainActor
+    func initialSetup() {
+        if let screen = NSScreen.main {
+            overlayWin.coordinator.dockRect = .init(center: CGPoint(x: screen.frame.midX, y: screen.frame.maxY + 100), size: CGSize(width: 60, height: 60))
+        }
+
+        overlayWin.coordinator.overlayViewWantsToDismiss = { [weak self] in
+            self?.setVisible(false)
+        }
+    }
+
     @MainActor
     func dockIconClicked() {
         guard let screen = NSScreen.main, let window = overlayWin.window else { return }
@@ -75,10 +75,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor func toggleVisible() {
         setVisible(!isVisible)
-    }
-
-    var isVisible: Bool {
-        overlayWin.window?.isVisible ?? false
     }
 
     @MainActor
@@ -98,6 +94,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlayWin.updateWindowSize()
         overlayWin.coordinator.show?()
     }
+
+    var isVisible: Bool {
+        overlayWin.window?.isVisible ?? false
+    }
+
+    let overlayWin = OverlayWindowController()
 
     // MARK: - Dock icon
     private var showPutBackIcon = false {

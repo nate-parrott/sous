@@ -15,7 +15,11 @@ struct ThreadView: View {
         VStack(alignment: .leading, spacing: 16) {
             answer
 
-            InputTextField(text: $input, options: options, focusDate: focusTime, onEvent: onEvent(_:), contentSize: $inputSize)
+            HStack {
+                InputTextField(text: $input, options: options, focusDate: focusTime, onEvent: onEvent(_:), contentSize: $inputSize)
+                InputAccessories(session: session)
+                    .colorScheme(.dark)
+            }
                 .frame(height: inputSize.height)
                 .asBubble(bgColor: Color.blue, fgColor: .white)
         }

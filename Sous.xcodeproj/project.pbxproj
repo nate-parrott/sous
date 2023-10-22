@@ -44,6 +44,9 @@
 		5FD696D92AE4800200DB4729 /* AsyncMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696D82AE4800200DB4729 /* AsyncMap.swift */; };
 		5FD696DB2AE48FE900DB4729 /* BrowserTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DA2AE48FE900DB4729 /* BrowserTool.swift */; };
 		5FD696DD2AE4909A00DB4729 /* TerminalTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DC2AE4909A00DB4729 /* TerminalTool.swift */; };
+		5FD696E02AE56AF200DB4729 /* PreferenceWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DF2AE56AF200DB4729 /* PreferenceWindow.swift */; };
+		5FD696E22AE56E7F00DB4729 /* InputAccessories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696E12AE56E7F00DB4729 /* InputAccessories.swift */; };
+		5FD696E42AE5708E00DB4729 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696E32AE5708E00DB4729 /* Buttons.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +93,9 @@
 		5FD696D82AE4800200DB4729 /* AsyncMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncMap.swift; sourceTree = "<group>"; };
 		5FD696DA2AE48FE900DB4729 /* BrowserTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowserTool.swift; sourceTree = "<group>"; };
 		5FD696DC2AE4909A00DB4729 /* TerminalTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerminalTool.swift; sourceTree = "<group>"; };
+		5FD696DF2AE56AF200DB4729 /* PreferenceWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceWindow.swift; sourceTree = "<group>"; };
+		5FD696E12AE56E7F00DB4729 /* InputAccessories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessories.swift; sourceTree = "<group>"; };
+		5FD696E32AE5708E00DB4729 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +143,7 @@
 			children = (
 				5F17E3752AD62F6F00F402D3 /* OverlayView.swift */,
 				5F17E3A22AD780EF00F402D3 /* ThreadView.swift */,
+				5FD696E12AE56E7F00DB4729 /* InputAccessories.swift */,
 				5F17E3622AD43B1F00F402D3 /* MessageCell.swift */,
 				5FD696D42AE47C8F00DB4729 /* SearchResultView.swift */,
 			);
@@ -148,6 +155,7 @@
 			children = (
 				5F17E3A42AD78E1800F402D3 /* TypingView.swift */,
 				5F1C95572ADB1BCF009E312E /* ViewUtils.swift */,
+				5FD696E32AE5708E00DB4729 /* Buttons.swift */,
 			);
 			path = "Util Views";
 			sourceTree = "<group>";
@@ -176,6 +184,7 @@
 				5F2598382AD38F6E003AF325 /* CopilotSession.swift */,
 				5FD696D22AE47A7500DB4729 /* ContextData.swift */,
 				5F17E3732AD62EE600F402D3 /* OverlayWindowController.swift */,
+				5FD696DE2AE56AE400DB4729 /* Prefs */,
 				5F1C95552ADB1BAF009E312E /* Chat Views */,
 				5F1C95562ADB1BBC009E312E /* Util Views */,
 				5F17E3A92AD7A86D00F402D3 /* DDHotKey */,
@@ -216,6 +225,14 @@
 				5F2598292AD35BDD003AF325 /* Metal.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5FD696DE2AE56AE400DB4729 /* Prefs */ = {
+			isa = PBXGroup;
+			children = (
+				5FD696DF2AE56AF200DB4729 /* PreferenceWindow.swift */,
+			);
+			path = Prefs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -303,12 +320,14 @@
 				5FD696D12AE32A9100DB4729 /* WebSearch.swift in Sources */,
 				5F2598392AD38F6E003AF325 /* CopilotSession.swift in Sources */,
 				5F17E3A32AD780EF00F402D3 /* ThreadView.swift in Sources */,
+				5FD696E02AE56AF200DB4729 /* PreferenceWindow.swift in Sources */,
 				5F17E3B22AD7A87800F402D3 /* DDHotKeyTextField.m in Sources */,
 				5F17E3B82AD7A89700F402D3 /* HotkeySetup.m in Sources */,
 				5F25983F2AD39E96003AF325 /* ExpandingScrollView.swift in Sources */,
 				5F2598352AD38E83003AF325 /* ArrayUtils.swift in Sources */,
 				5FD696D32AE47A7500DB4729 /* ContextData.swift in Sources */,
 				5F2598372AD38E83003AF325 /* SeededRandom.swift in Sources */,
+				5FD696E22AE56E7F00DB4729 /* InputAccessories.swift in Sources */,
 				5F2598332AD38E83003AF325 /* DataStore.swift in Sources */,
 				5F2598362AD38E83003AF325 /* SwiftUIHelpers.swift in Sources */,
 				5F17E3762AD62F6F00F402D3 /* OverlayView.swift in Sources */,
@@ -320,6 +339,7 @@
 				5F17E3682AD4425400F402D3 /* CodableHelpers.swift in Sources */,
 				5FD696D52AE47C8F00DB4729 /* SearchResultView.swift in Sources */,
 				5F17E3742AD62EE600F402D3 /* OverlayWindowController.swift in Sources */,
+				5FD696E42AE5708E00DB4729 /* Buttons.swift in Sources */,
 				5F17E3A52AD78E1800F402D3 /* TypingView.swift in Sources */,
 				5F2598272AD3516D003AF325 /* InputTextField.swift in Sources */,
 				5F2598252AD33B0B003AF325 /* View+Measure.swift in Sources */,
