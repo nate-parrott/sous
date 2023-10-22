@@ -47,6 +47,7 @@
 		5FD696E02AE56AF200DB4729 /* PreferenceWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696DF2AE56AF200DB4729 /* PreferenceWindow.swift */; };
 		5FD696E22AE56E7F00DB4729 /* InputAccessories.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696E12AE56E7F00DB4729 /* InputAccessories.swift */; };
 		5FD696E42AE5708E00DB4729 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696E32AE5708E00DB4729 /* Buttons.swift */; };
+		5FD696E62AE575D600DB4729 /* URLUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5FD696E52AE575D600DB4729 /* URLUtils.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -96,6 +97,7 @@
 		5FD696DF2AE56AF200DB4729 /* PreferenceWindow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferenceWindow.swift; sourceTree = "<group>"; };
 		5FD696E12AE56E7F00DB4729 /* InputAccessories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InputAccessories.swift; sourceTree = "<group>"; };
 		5FD696E32AE5708E00DB4729 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		5FD696E52AE575D600DB4729 /* URLUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLUtils.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,6 +207,7 @@
 				5FD696D62AE47F1700DB4729 /* Async.swift */,
 				5FD696D82AE4800200DB4729 /* AsyncMap.swift */,
 				5F25983A2AD39C3D003AF325 /* LLM.swift */,
+				5FD696E52AE575D600DB4729 /* URLUtils.swift */,
 				5F2598322AD38E83003AF325 /* SeededRandom.swift */,
 				5F25982F2AD38E83003AF325 /* StringHelpers.swift */,
 				5F17E3672AD4425400F402D3 /* CodableHelpers.swift */,
@@ -348,6 +351,7 @@
 				5FD696DD2AE4909A00DB4729 /* TerminalTool.swift in Sources */,
 				5FD696D72AE47F1700DB4729 /* Async.swift in Sources */,
 				5F25983D2AD39D55003AF325 /* Scripting.swift in Sources */,
+				5FD696E62AE575D600DB4729 /* URLUtils.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

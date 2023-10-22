@@ -1,6 +1,10 @@
 import Foundation
 import ChatToys
 
+enum WebSearchConstants {
+    static let resultsToFetchContentFor: Int = 3
+}
+
 struct WebSearchToolResponse: Equatable, Codable {
     var response: WebSearchResponse
     var contents = [PageContent]()
@@ -20,7 +24,7 @@ struct WebSearchToolResponse: Equatable, Codable {
                 ContextData(text: "#\(res.title)\n\(res.snippet ?? "")", includeInLastMessageOnly: false, isToolOutput: true)
             )
             if let content = contents.first(where: { $0.result.id == res.id }) {
-                ctx.append(ContextData(text: "##START PAGE CONTENT\n\(content.text)", includeInLastMessageOnly: true, isToolOutput: true, suffix: "##END PAGE CONTENT"))
+                ctx.append(ContextData(text: "##START PAGE CONTENT\n\(content.text)", includeInLastMessageOnly: true, isToolOutput: true, suffix: "##\nEND PAGE CONTENT"))
             }
         }
         return ctx
@@ -46,11 +50,12 @@ class WebSearchTool: Tool {
         return AsyncThrowingStream { continuation in
             Task {
                 do {
-                    let webResponse = try await GoogleSearchEngine().search(query: query)
+                    var webResponse = try await GoogleSearchEngine().search(query: query)
+                    webResponse.results = webResponse.results.byMovingMatchingItemsToFront { $0.url.hostWithoutWWW != "youtube.com" }
                     var toolResponse = WebSearchToolResponse(response: webResponse)
                     continuation.yield(.webSearch(toolResponse))
 
-                    toolResponse.contents = await webResponse.results.prefix(2).concurrentMap { res in
+                    toolResponse.contents = await webResponse.results.prefix(WebSearchConstants.resultsToFetchContentFor).concurrentMap { res in
                         try? await withTimeout(3, work: { () -> WebSearchToolResponse.PageContent in
                             let text = try await fetchPageContent(url: res.url, charLimit: 2000)
                             return .init(result: res, text: text)

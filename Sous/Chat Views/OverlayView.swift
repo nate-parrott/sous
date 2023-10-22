@@ -91,7 +91,7 @@ struct OverlayView: View {
 
     @ViewBuilder private var thread: some View {
         ThreadView(session: coordinator.session, focusTime: focusTime)
-            .frame(width: 300)
+            .frame(width: 400)
             .padding(.leading, 128 + 30)
             .padding(.bottom, (128 - 50) / 2)
             .opacity(visible ? 1 : 0)

@@ -85,9 +85,10 @@ struct MessageView: View {
     var body: some View {
         MessageBodyView(model: model.body)
             .lineLimit(nil)
-            .multilineTextAlignment(model.fromMe ? .trailing : .leading)
             .asBubble(bgColor: model.fromMe ? Color.blue : Color.clear, fgColor: model.fromMe ? .white : Color.primary)
-            .frame(maxWidth: .infinity, alignment: model.fromMe ? .trailing : .leading)
+            .multilineTextAlignment(.leading)
+//            .multilineTextAlignment(model.fromMe ? .trailing : .leading)
+//            .frame(maxWidth: .infinity, alignment: model.fromMe ? .trailing : .leading)
     }
 }
 

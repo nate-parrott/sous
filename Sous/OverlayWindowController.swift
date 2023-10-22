@@ -3,7 +3,12 @@ import SwiftUI
 
 class OverlayWindowController: NSWindowController, NSWindowDelegate {
     let coordinator = OverlayViewCoordinator()
-    lazy var contentVC = NSHostingController(rootView: OverlayView(coordinator: coordinator))
+    lazy var contentView = OverlayHostingView(rootView: OverlayView(coordinator: coordinator))
+    lazy var contentVC: NSViewController = {
+        let vc = NSViewController(nibName: nil, bundle: nil)
+        vc.view = self.contentView
+        return vc
+    }()
 
     override init(window: NSWindow?) {
         super.init(window: nil)
@@ -36,7 +41,7 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
     override func windowDidLoad() {
         super.windowDidLoad()
         let window = self.window!
-        contentVC.sizingOptions = []
+        contentView.sizingOptions = []
         contentVC.view.translatesAutoresizingMaskIntoConstraints = false
         window.contentViewController = contentVC
         updateWindowSize()
@@ -65,5 +70,11 @@ class OverlayWindowController: NSWindowController, NSWindowDelegate {
 
     @IBAction override func cancelOperation(_ sender: Any?) {
         coordinator.overlayViewWantsToDismiss?()
+    }
+
+    class OverlayHostingView<V: View>: NSHostingView<V> {
+        override func acceptsFirstMouse(for event: NSEvent?) -> Bool {
+            true
+        }
     }
 }

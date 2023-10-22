@@ -15,16 +15,16 @@ extension NSFont {
 
 extension View {
     @ViewBuilder func asBubble(bgColor: Color, fgColor: Color) -> some View {
-        let shape = RoundedRectangle(cornerRadius: 14, style: .continuous)
+        let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
 
         self
         .background(bgColor.opacity(0.8))
         .background(.regularMaterial)
         .clipShape(shape)
         .overlay {
-            shape.strokeBorder(fgColor.opacity(0.2), lineWidth: 0.5)
+            shape.strokeBorder(fgColor.opacity(0.12), lineWidth: 0.5)
         }
         .foregroundColor(fgColor)
-        .shadow(color: Color.black.opacity(0.15), radius: 8, x: 0, y: 2)
+        .shadow(color: Color.black.opacity(0.12), radius: 8, x: 0, y: 2)
     }
 }
