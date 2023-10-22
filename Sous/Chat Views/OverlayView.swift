@@ -61,18 +61,28 @@ struct OverlayView: View {
         .frame(width: coordinator.windowSize.width, height: coordinator.windowSize.height)
         .onAppear {
             coordinator.show = {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                    self.focusTime = Date()
-                    withAnimation(.snappy) {
-                        self.visible = true
+                if PrefKey.animateAppearance.currentBoolValue {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        self.focusTime = Date()
+                        withAnimation(.snappy(duration: 0.3, extraBounce: 0.15)) {
+                            self.visible = true
+                        }
                     }
+                } else {
+                    self.focusTime = Date()
+                    self.visible = true
                 }
             }
 
             coordinator.putAway = { completion in
-                withAnimation(.snappy(duration: 0.3, extraBounce: 0.1), completionCriteria: .logicallyComplete) {
+                if PrefKey.animateAppearance.currentBoolValue {
+                    withAnimation(.snappy(duration: 0.26, extraBounce: 0.0), completionCriteria: .logicallyComplete) {
+                        self.visible = false
+                    } completion: {
+                        completion()
+                    }
+                } else {
                     self.visible = false
-                } completion: {
                     completion()
                 }
             }

@@ -16,6 +16,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     let overlayWindowCoordinator = OverlayWindowCoordinator()
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
+        UserDefaults.standard.register(defaults: [
+            PrefKey.animateAppearance.rawValue: true
+        ])
+
         // Insert code here to initialize your application
         overlayWindowCoordinator.initialSetup()
         overlayWindowCoordinator.setVisible(true)
