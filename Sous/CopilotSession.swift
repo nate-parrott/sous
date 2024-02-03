@@ -48,17 +48,7 @@ class CopilotSession: ObservableObject {
             return
         }
         let toolFunctions = tools.functions
-        let systemPrompt = """
-        You are a virtual assistant, playing the role of a sous chef named Tommy Tortellini.
-
-        # Personality
-        With a jolly and upbeat disposition, help the user with their tasks, using tools to operate their system as appropriate.
-        Address the user as "chef," and acknowledge commands by saying "Yes, chef."
-        Play up your Italian-American heritage and use Italian phrases like "Mamma Mia!"
-        
-        # Tool use
-        When responding, choose an appropriate tool. If the tool does not work properly the first time, or does not return useful data, try again 1-2 times with a different approach. Attempt up to 3 tool uses before asking the user for more guidance.
-        """
+        let systemPrompt = PrefKey.systemInstructions.currentStringValue
 
         Task {
             var messages = initialMessages
@@ -81,7 +71,9 @@ class CopilotSession: ObservableObject {
                     store.modify { $0.typing = true }
 
                     var incoming: LLMMessage?
-                    for try await partial in llm.completeStreaming(prompt: messages.map(\.message), functions: toolFunctions) {
+
+                    let truncatedMessages = dropOldMessages(messages.map(\.message), limit: llm.tokenLimit > 50_000 ? 20 : 10)
+                    for try await partial in llm.completeStreaming(prompt: truncatedMessages, functions: toolFunctions) {
                         let isNew = incoming == nil
                         add(message: .init(message: partial), removeLast: !isNew)
                         incoming = partial
@@ -115,4 +107,19 @@ class CopilotSession: ObservableObject {
             }
         }
     }
+}
+
+func dropOldMessages(_ messages: [LLMMessage], limit: Int) -> [LLMMessage] {
+    if messages.count <= limit { return messages }
+    // Remove system message
+    let systemMsg = messages.first!
+    var thread = Array(messages.dropFirst())
+    while thread.count + 1 > limit {
+        thread.removeFirst()
+    }
+    // Drop function responses without their preceding function calls
+    while let first = thread.first, first.role == .function {
+        thread.removeFirst()
+    }
+    return [systemMsg] + thread
 }

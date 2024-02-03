@@ -5,6 +5,9 @@ enum PrefKey: String {
     case openAIApiKey
     case openAIOrgId
     case animateAppearance
+    case systemInstructions
+    case hotkey
+    case useGPT4
 }
 
 extension PrefKey {
@@ -35,16 +38,24 @@ class PreferenceWindow: NSWindow {
 struct PreferenceView: View {
     @AppStorage(PrefKey.openAIApiKey.rawValue) var openAIApiKey = ""
     @AppStorage(PrefKey.openAIOrgId.rawValue) var openAIOrgId = ""
+    @AppStorage(PrefKey.systemInstructions.rawValue) var systemInstructions = ""
     @AppStorage(PrefKey.animateAppearance.rawValue) var animateAppearance = true
+    @AppStorage(PrefKey.useGPT4.rawValue) var useGPT4 = false
+    @AppStorage(PrefKey.hotkey.rawValue) var hotkey = false
 
     var body: some View {
         Form {
             Section(header: Text("OpenAI")) {
                 TextField("API Key", text: $openAIApiKey)
                 TextField("Organization ID", text: $openAIOrgId)
+                Toggle("Use GPT 4", isOn: $useGPT4)
             }
             Section(header: Text("Appearance")) {
                 Toggle("Animate show and hide", isOn: $animateAppearance)
+                Toggle("Press Option+Space to open", isOn: $hotkey)
+            }
+            Section(header: Text("System Instructions")) {
+                TextEditor(text: $systemInstructions)
             }
         }
         .formStyle(.grouped)

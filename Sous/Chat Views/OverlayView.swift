@@ -21,17 +21,25 @@ struct OverlayView: View {
     @ObservedObject var coordinator: OverlayViewCoordinator
 
     @State private var visible = false
-    @State private var positionOffset: CGPoint = .zero
-    @State private var positionOffsetAtStartOfDrag: CGPoint?
+    @State private var position: CGPoint?
+    @State private var positionAtStartOfDrag: CGPoint?
     @State private var focusTime: Date?
+    @State private var dockPosWhenLastShown: CGPoint?
+
+    private func posWhenVisible(desktopSize: CGSize) -> CGPoint {
+        if let position {
+            return position
+        }
+        if let dockPosWhenLastShown {
+            return CGPoint(x: dockPosWhenLastShown.x, y: desktopSize.height - 200)
+        }
+        return CGPoint(x: desktopSize.width / 2, y: desktopSize.height - 200)
+    }
 
     var body: some View {
         ZStack {
-//            Circle().fill(.blue).frame(width: 500, height: 500)
-
             GeometryReader { geo in
-                let defaultPos = CGPoint(x: geo.size.width / 2, y: geo.size.height - 200)
-                let visiblePos = CGPoint(x: defaultPos.x + positionOffset.x, y: defaultPos.y + positionOffset.y)
+                let visiblePos = self.posWhenVisible(desktopSize: geo.size) // CGPoint(x: defaultPos.x + positionOffset.x, y: defaultPos.y + positionOffset.y)
                 let pos = visible ? visiblePos : coordinator.dockRect.center
                 let scale = visible ? 1 : (max(1, coordinator.dockRect.height) / 128)
 
@@ -47,13 +55,15 @@ struct OverlayView: View {
                         .scaleEffect(scale)
                         .position(pos)
                         .gesture(DragGesture().onChanged { val in
-                            if let b = positionOffsetAtStartOfDrag {
-                                self.positionOffset.x = b.x + val.location.x - val.startLocation.x
-                                self.positionOffset.y = b.y + val.location.y - val.startLocation.y
+                            if let b = positionAtStartOfDrag {
+                                self.position = .init(
+                                    x:  b.x + val.location.x - val.startLocation.x,
+                                    y: b.y + val.location.y - val.startLocation.y
+                                )
                             } else {
-                                positionOffsetAtStartOfDrag = positionOffset
+                                positionAtStartOfDrag = pos
                             }
-                        }.onEnded {  _ in positionOffsetAtStartOfDrag = nil })
+                        }.onEnded {  _ in positionAtStartOfDrag = nil })
                 }
             }
         }
@@ -61,6 +71,7 @@ struct OverlayView: View {
         .frame(width: coordinator.windowSize.width, height: coordinator.windowSize.height)
         .onAppear {
             coordinator.show = {
+                dockPosWhenLastShown = coordinator.dockRect.center
                 if PrefKey.animateAppearance.currentBoolValue {
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
                         self.focusTime = Date()

@@ -28,9 +28,9 @@ class Tools {
     init() {
         tools = [
             ApplescriptTool(),
-            JavascriptTool(),
+//            JavascriptTool(),
             WebSearchTool(),
-            TerminalTool(),
+//            TerminalTool(),
         ]
     }
 

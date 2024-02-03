@@ -17,7 +17,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         UserDefaults.standard.register(defaults: [
-            PrefKey.animateAppearance.rawValue: true
+            PrefKey.animateAppearance.rawValue: true,
+            PrefKey.hotkey.rawValue: true,
+            PrefKey.systemInstructions.rawValue: "You are a helpful, ebullient virtual assistant named Tommy Tortellini. You joyfully help users by answering questions and performing tasks. You communicate concisely and say 'Mamma mia!' and reference Italian food frequently."
         ])
 
         // Insert code here to initialize your application
@@ -25,8 +27,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         overlayWindowCoordinator.setVisible(true)
 
         HotkeySetup.registerGlobalHotkey { [weak self] in
-            DispatchQueue.main.async {
-                self?.overlayWindowCoordinator.toggleVisible()
+            if PrefKey.hotkey.currentBoolValue {
+                DispatchQueue.main.async {
+                    self?.overlayWindowCoordinator.toggleVisible()
+                }
             }
         }
     }

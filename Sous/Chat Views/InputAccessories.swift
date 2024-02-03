@@ -15,6 +15,18 @@ struct InputAccessories: View {
                 // TODO
                 EmptyView()
             }
+            WithSnapshot(dataStore: session.store, snapshot: { $0.messages.count > 0 }) { hasMessages in
+                if hasMessages {
+                    Button(action: {
+                        session.store.modify { $0.messages.removeAll() }
+                    }) {
+                        Image(systemName: "minus")
+                            .frame(both: 30)
+                            .contentShape(Rectangle())
+                    }
+                }
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(.trailing)
     }

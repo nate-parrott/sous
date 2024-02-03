@@ -45,7 +45,7 @@ struct ThreadView: View {
             .mask(alignment: .bottom) {
                 LinearGradient(stops: [
                     .init(color: Color.clear, location: 0),
-                    .init(color: Color.black, location: 0.2),
+                    .init(color: Color.black, location: 0.1),
                     .init(color: Color.black, location: 0.97),
                     .init(color: Color.clear, location: 1)
                 ], startPoint: .top, endPoint: .bottom)
