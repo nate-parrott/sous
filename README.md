@@ -4,7 +4,7 @@ His name is Tommy Tortellini and he lives in your dock. He's a little chef who c
 
 You need to give him an OpenAI API key. You can get one [here](https://platform.openai.com/).
 
-![Video recording](/Images/Sous.mp4)
+![Video recording](https://github.com/nate-parrott/sous/raw/main/Images/Sous.mp4)
 
 ## Installation: download from [Releases](https://github.com/nate-parrott/sous/releases)
 
